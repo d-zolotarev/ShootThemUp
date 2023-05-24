@@ -22,6 +22,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	bool GetWeaponUIData(FWeaponUIData& UIData) const;
 
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	bool GetWeaponAmmo(FAmmoData& AmmoData) const;
+
 private:
 	template<typename T>
 	T* GetComponentByClass(TSubclassOf<UActorComponent> ComponentClass) const;

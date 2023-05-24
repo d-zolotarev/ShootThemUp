@@ -16,3 +16,9 @@ FORCEINLINE bool USTUPlayerHUDWidget::GetWeaponUIData(FWeaponUIData& UIData) con
     const auto WeaponComponent = GetComponentByClass<USTUWeaponComponent>(USTUWeaponComponent::StaticClass());
     return WeaponComponent ? WeaponComponent->GetWeaponUIData(UIData) : false;
 }
+
+FORCEINLINE bool USTUPlayerHUDWidget::GetWeaponAmmo(FAmmoData& AmmoData) const
+{
+    const auto WeaponComponent = GetComponentByClass<USTUWeaponComponent>(USTUWeaponComponent::StaticClass());
+    return WeaponComponent ? WeaponComponent->GetWeaponAmmo(AmmoData) : false;
+}

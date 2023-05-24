@@ -69,6 +69,16 @@ FORCEINLINE bool USTUWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) con
 	return false;
 }
 
+bool USTUWeaponComponent::GetWeaponAmmo(FAmmoData& AmmoData) const
+{
+	if (CurrentWeapon)
+	{
+		AmmoData = CurrentWeapon->GetCurrentAmmo();
+		return true;
+	}
+	return false;
+}
+
 // Called when the game starts
 void USTUWeaponComponent::BeginPlay()
 {

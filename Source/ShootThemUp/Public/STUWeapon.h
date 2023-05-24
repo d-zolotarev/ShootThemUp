@@ -23,6 +23,7 @@ public:
 	FORCEINLINE bool CanReload() const { return CurrentAmmo.Bullets < DefaultAmmo.Bullets && CurrentAmmo.Clips > 0; }
 	FORCEINLINE bool IsFiring() const { return bIsFiring; }
 	FORCEINLINE FWeaponUIData GetUIData() const { return UIData; }
+	FORCEINLINE FAmmoData GetCurrentAmmo() const { return CurrentAmmo; }
 
 public:
 	FOnClipEmptySignature OnClipEmpty;

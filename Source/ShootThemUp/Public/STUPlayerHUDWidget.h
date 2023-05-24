@@ -25,6 +25,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	bool GetCurrentWeaponAmmo(FAmmoData& AmmoData) const;
 
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	bool IsPlayerAlive() const;
+	
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	bool IsPlayerSpectating() const;
+
 private:
 	template<typename T>
 	T* GetComponentByClass(TSubclassOf<UActorComponent> ComponentClass) const;

@@ -2,7 +2,7 @@
 
 #include "Animation/AnimSequenceBase.h"
 
-class AnimUtils
+class STUAnimUtils
 {
 public:
 	template<typename T>

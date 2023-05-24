@@ -8,7 +8,7 @@
 #include "STUEquipFinishedAnimNotify.h"
 #include "STUReloadingFinishedAnimNotify.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "AnimUtils.h"
+#include "STUAnimUtils.h"
 
 static constexpr int32 MaxWeapons = 2;
 
@@ -167,13 +167,13 @@ void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* const AnimMontage) const
 
 void USTUWeaponComponent::InitAnimations()
 {
-	auto EquipFinishedNotify = AnimUtils::FindAnimNotifyByClass<USTUEquipFinishedAnimNotify>(EquipAnimMontage);
+	auto EquipFinishedNotify = STUAnimUtils::FindAnimNotifyByClass<USTUEquipFinishedAnimNotify>(EquipAnimMontage);
 	check(EquipFinishedNotify);
 	EquipFinishedNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnEquipFinished);
 
 	for (const auto& Data : WeaponData)
 	{
-		auto ReloadingFinishedNotify = AnimUtils::FindAnimNotifyByClass<USTUReloadingFinishedAnimNotify>(Data.ReloadAnimMontage);
+		auto ReloadingFinishedNotify = STUAnimUtils::FindAnimNotifyByClass<USTUReloadingFinishedAnimNotify>(Data.ReloadAnimMontage);
 		check(ReloadingFinishedNotify);
 		ReloadingFinishedNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnReloadingFinished);
 	}

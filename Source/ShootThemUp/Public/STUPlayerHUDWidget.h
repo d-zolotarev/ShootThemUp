@@ -30,17 +30,4 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	bool IsPlayerSpectating() const;
-
-private:
-	template<typename T>
-	T* GetComponentByClass(TSubclassOf<UActorComponent> ComponentClass) const;
 };
-
-template<typename T>
-FORCEINLINE T* USTUPlayerHUDWidget::GetComponentByClass(TSubclassOf<UActorComponent> ComponentClass) const
-{
-	const auto OwningPlayer = GetOwningPlayerPawn();
-	if (!OwningPlayer) return nullptr;
-
-	return Cast<T>(OwningPlayer->GetComponentByClass(ComponentClass));
-}

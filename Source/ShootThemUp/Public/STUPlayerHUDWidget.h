@@ -20,10 +20,10 @@ public:
 	float GetHealthPercent() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	bool GetWeaponUIData(FWeaponUIData& UIData) const;
+	bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	bool GetWeaponAmmo(FAmmoData& AmmoData) const;
+	bool GetCurrentWeaponAmmo(FAmmoData& AmmoData) const;
 
 private:
 	template<typename T>

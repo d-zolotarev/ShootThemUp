@@ -11,14 +11,14 @@ FORCEINLINE float USTUPlayerHUDWidget::GetHealthPercent() const
     return HealthComponent ? HealthComponent->GetHealthPercent() : 0.0f;
 }
 
-FORCEINLINE bool USTUPlayerHUDWidget::GetWeaponUIData(FWeaponUIData& UIData) const
+FORCEINLINE bool USTUPlayerHUDWidget::GetCurrentWeaponUIData(FWeaponUIData& UIData) const
 {
     const auto WeaponComponent = GetComponentByClass<USTUWeaponComponent>(USTUWeaponComponent::StaticClass());
-    return WeaponComponent ? WeaponComponent->GetWeaponUIData(UIData) : false;
+    return WeaponComponent ? WeaponComponent->GetCurrentWeaponUIData(UIData) : false;
 }
 
-FORCEINLINE bool USTUPlayerHUDWidget::GetWeaponAmmo(FAmmoData& AmmoData) const
+FORCEINLINE bool USTUPlayerHUDWidget::GetCurrentWeaponAmmo(FAmmoData& AmmoData) const
 {
     const auto WeaponComponent = GetComponentByClass<USTUWeaponComponent>(USTUWeaponComponent::StaticClass());
-    return WeaponComponent ? WeaponComponent->GetWeaponAmmo(AmmoData) : false;
+    return WeaponComponent ? WeaponComponent->GetCurrentWeaponAmmo(AmmoData) : false;
 }

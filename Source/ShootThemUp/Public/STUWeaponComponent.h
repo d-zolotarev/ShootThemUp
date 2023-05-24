@@ -21,8 +21,8 @@ public:
 	void NextWeapon();
 	void Reload();
 	bool IsFiring() const;
-	bool GetWeaponUIData(FWeaponUIData& UIData) const;
-	bool GetWeaponAmmo(FAmmoData& AmmoData) const;
+	bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
+	bool GetCurrentWeaponAmmo(FAmmoData& AmmoData) const;
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")

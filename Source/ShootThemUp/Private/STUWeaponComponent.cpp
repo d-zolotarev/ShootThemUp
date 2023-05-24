@@ -59,7 +59,7 @@ FORCEINLINE bool USTUWeaponComponent::IsFiring() const
 	return CurrentWeapon && CurrentWeapon->IsFiring();
 }
 
-FORCEINLINE bool USTUWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
+FORCEINLINE bool USTUWeaponComponent::GetCurrentWeaponUIData(FWeaponUIData& UIData) const
 {
 	if (CurrentWeapon)
 	{
@@ -69,7 +69,7 @@ FORCEINLINE bool USTUWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) con
 	return false;
 }
 
-bool USTUWeaponComponent::GetWeaponAmmo(FAmmoData& AmmoData) const
+bool USTUWeaponComponent::GetCurrentWeaponAmmo(FAmmoData& AmmoData) const
 {
 	if (CurrentWeapon)
 	{

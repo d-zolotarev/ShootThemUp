@@ -26,6 +26,9 @@ public:
 	FORCEINLINE bool IsDead() const { return FMath::IsNearlyZero(Health); }
 
 public:
+	bool TryToAddHealth(int32 HealthAmount);
+
+public:
 	FOnDeathSignature OnDeath;
 	FOnHealthChanged OnHealthChanged;
 
@@ -55,6 +58,7 @@ protected:
 private:
 	void AutoHeal();
 	void SetHealth(float Value);
+	FORCEINLINE bool IsHealthFull() const { return FMath::IsNearlyEqual(Health, MaxHealth); }
 
 private:
 	float Health;

@@ -7,18 +7,26 @@
 
 // Sets default values for this component's properties
 USTUHealthComponent::USTUHealthComponent() :
-	Health{0.f},
 	MaxHealth{100.f},
 	bAutoHealEnabled{true},
 	AutoHealDelay{3.f},
 	HealthUpdateRate{1.f},
-	HealModifier{5.f}
+	HealModifier{5.f},
+	Health{0.f}
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+bool USTUHealthComponent::TryToAddHealth(int32 HealthAmount)
+{
+	if (IsDead() || IsHealthFull())
+		return false;
+
+	SetHealth(Health + HealthAmount);
+	return true;
+}
 
 // Called when the game starts
 void USTUHealthComponent::BeginPlay()
@@ -51,7 +59,7 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, co
 	}
 }
 
-void USTUHealthComponent::SetHealth(float Value)
+FORCEINLINE void USTUHealthComponent::SetHealth(float Value)
 {
 	float OldHealth = Health;
 	Health = FMath::Clamp(Value, 0.f, MaxHealth);
@@ -61,7 +69,7 @@ void USTUHealthComponent::SetHealth(float Value)
 
 void USTUHealthComponent::AutoHeal()
 {
-	if (IsDead() || FMath::IsNearlyEqual(Health, MaxHealth))
+	if (IsDead() || IsHealthFull())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(AutoHealTimerHandle);
 

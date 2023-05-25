@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "STUCore.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnClipEmptySignature, class ASTUWeapon*);
 DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnNotifiedSignature, const class USkeletalMeshComponent* const);
@@ -21,6 +21,12 @@ struct FAmmoData
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Ammo")
 	bool Infinite;
+
+	friend FORCEINLINE bool operator==(const FAmmoData& l, const FAmmoData& r)
+	{
+		return l.Bullets == r.Bullets && l.Clips == r.Clips;
+	}
+
 };
 
 USTRUCT(BlueprintType)

@@ -122,12 +122,10 @@ FORCEINLINE void ASTUWeapon::DecreaseAmmo()
 {
 	CurrentAmmo.Bullets--;
 
-	LogAmmo();
-
 	if (IsClipEmpty() && !IsAmmoEmpty())
 	{
 		StopFiring();
-		OnClipEmpty.Broadcast();
+		OnClipEmpty.Broadcast(this);
 	}
 }
 
@@ -137,20 +135,26 @@ FORCEINLINE void ASTUWeapon::Reload()
 	
 	CurrentAmmo.Clips--;
 	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
-
-	UE_LOG(LogTemp, Warning, TEXT("Realoaded"));
-	LogAmmo();
 }
 
-FORCEINLINE void ASTUWeapon::LogAmmo() const
+bool ASTUWeapon::TryToAddAmmo(int32 ClipsAmount)
 {
-	if (CurrentAmmo.Infinite)
+	if (CurrentAmmo.Infinite || IsAmmoFull() || ClipsAmount <= 0) return false;
+
+	if (IsAmmoEmpty())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Ammo: INFINITE"));
+		CurrentAmmo.Clips = FMath::Clamp(ClipsAmount, 0, DefaultAmmo.Clips + 1);
+		OnClipEmpty.Broadcast(this);
+	}
+	else if (CurrentAmmo.Clips < DefaultAmmo.Clips)
+	{
+		const auto NewClipsAmount = CurrentAmmo.Clips + ClipsAmount;
+		CurrentAmmo.Clips = (DefaultAmmo.Clips - NewClipsAmount >= 0) ? NewClipsAmount : DefaultAmmo.Clips;
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Ammo: %d/%d"), CurrentAmmo.Bullets, CurrentAmmo.Clips);
+		return false;
 	}
-}
 
+	return true;
+}

@@ -24,6 +24,7 @@ public:
 	FORCEINLINE bool IsFiring() const { return bIsFiring; }
 	FORCEINLINE FWeaponUIData GetUIData() const { return UIData; }
 	FORCEINLINE FAmmoData GetCurrentAmmo() const { return CurrentAmmo; }
+	bool TryToAddAmmo(int32 ClipsAmount);
 
 public:
 	FOnClipEmptySignature OnClipEmpty;
@@ -61,7 +62,9 @@ protected:
 	void DecreaseAmmo();
 	FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.Infinite && IsClipEmpty() && CurrentAmmo.Clips == 0; }
 	FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets == 0; }
-	void LogAmmo() const;
+
+private:
+	FORCEINLINE bool IsAmmoFull() const { return CurrentAmmo == DefaultAmmo; }
 
 private:
 	FAmmoData CurrentAmmo;

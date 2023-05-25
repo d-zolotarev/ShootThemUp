@@ -44,14 +44,21 @@ void USTUWeaponComponent::NextWeapon()
 	}
 }
 
-void USTUWeaponComponent::Reload()
+void USTUWeaponComponent::Reload(ASTUWeapon* Weapon)
 {
-	if (!CanReload()) return;
+	if (!Weapon) return;
 
-	StopFiring();
-	CurrentWeapon->Reload();
-	bReloadingAnimInProgress = true;
-	PlayAnimMontage(CurrentReloadAnimMontage);
+	if (CurrentWeapon == Weapon)
+	{
+		ReloadCurrentWeapon();
+	}
+	else
+	{
+		for (auto AvailableWeapon : Weapons)
+		{
+			if (AvailableWeapon == Weapon) AvailableWeapon->Reload();
+		}
+	}
 }
 
 FORCEINLINE bool USTUWeaponComponent::IsFiring() const
@@ -77,6 +84,26 @@ bool USTUWeaponComponent::GetCurrentWeaponAmmo(FAmmoData& AmmoData) const
 		return true;
 	}
 	return false;
+}
+
+bool USTUWeaponComponent::TryToAddAmmo(int32 ClipsAmount, TSubclassOf<class ASTUWeapon> WeaponClass)
+{
+	for (const auto Weapon : Weapons)
+	{
+		if (Weapon && Weapon->IsA(WeaponClass))
+			return Weapon->TryToAddAmmo(ClipsAmount);
+	}
+	return false;
+}
+
+void USTUWeaponComponent::ReloadCurrentWeapon()
+{
+	if (!CanReload()) return;
+
+	StopFiring();
+	CurrentWeapon->Reload();
+	bReloadingAnimInProgress = true;
+	PlayAnimMontage(CurrentReloadAnimMontage);
 }
 
 // Called when the game starts
@@ -149,7 +176,6 @@ void USTUWeaponComponent::EquipWeapon(int32 WeaponIndex)
 	CurrentWeapon = Weapons[WeaponIndex];
 	AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocket);
 	
-	//CurrentReloadAnimMontage = WeaponData[WeaponIndex].ReloadAnimMontage;
 	const auto CurrentWeaponData = WeaponData.FindByPredicate(
 		[Class = this->CurrentWeapon->GetClass()](const FWeaponData& Data) { return Data.WeaponClass == Class; });
 	CurrentReloadAnimMontage = CurrentWeaponData ? CurrentWeaponData->ReloadAnimMontage : nullptr;

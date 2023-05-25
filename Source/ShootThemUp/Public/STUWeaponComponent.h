@@ -19,10 +19,12 @@ public:
 	void Fire();
 	void StopFiring();
 	void NextWeapon();
-	void Reload();
+	void Reload(class ASTUWeapon* Weapon);
 	bool IsFiring() const;
 	bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
 	bool GetCurrentWeaponAmmo(FAmmoData& AmmoData) const;
+	bool TryToAddAmmo(int32 ClipsAmount, TSubclassOf<class ASTUWeapon> WeaponClass);
+	void ReloadCurrentWeapon();
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")

@@ -40,4 +40,8 @@ private:
 	void PickupWasTaken();
 	void Respawn();
 	void SetVisibility(bool bIsVisible);
+	void GenerateYaw();
+
+private:
+	float Yaw;
 };

@@ -7,8 +7,10 @@ public class ShootThemUp : ModuleRules
 	public ShootThemUp(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		
+		CppStandard = CppStandardVersion.Cpp17;
+		
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Niagara", "PhysicsCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

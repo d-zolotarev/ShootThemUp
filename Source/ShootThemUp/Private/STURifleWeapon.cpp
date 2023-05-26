@@ -7,11 +7,15 @@
 #include "GameFramework/Controller.h"
 #include "STUCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "STUWeaponFXComponent.h"
 
 
 ASTURifleWeapon::ASTURifleWeapon() : FireRate{600.f}, DamageAmount{10.f}
 {
 	DefaultAmmo = FAmmoData{30, 10, false};
+
+	WeaponFXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("WeaponFXComponent");
+	check(WeaponFXComponent);
 }
 
 void ASTURifleWeapon::Fire()
@@ -34,15 +38,13 @@ void ASTURifleWeapon::MakeShot()
 		return;
 	}
 
-	const FHitResult HitResult = Hit();
-
-	if (HitResult.bBlockingHit)
+	if (const FHitResult HitResult = Hit(); HitResult.bBlockingHit)
 	{
 		TSubclassOf<UDamageType> DamageType;
 		UGameplayStatics::ApplyPointDamage(HitResult.GetActor(), DamageAmount, HitResult.ImpactNormal, HitResult,
 			GetOwner()->GetInstigatorController(), this, DamageType);
 		UE_LOG(LogTemp, Warning, TEXT("Hit %s"), *HitResult.BoneName.ToString());
+		WeaponFXComponent->PlayImpactFX(HitResult);
 	}
-	DrawDebugLine(GetWorld(), HitResult.TraceStart, HitTraceEnd(HitResult), FColor::Red, false, 3.f, 0U, 3.f);
 	DecreaseAmmo();
 }

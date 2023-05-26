@@ -59,7 +59,7 @@ void ASTUCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnHealthChanged(HealthComponent->GetHealth());
+	OnHealthChanged(HealthComponent->GetHealth(), 0.f);
 
 	HealthComponent->OnDeath.AddUObject(this, &ASTUCharacter::OnDeath);
 	HealthComponent->OnHealthChanged.AddUObject(this, &ASTUCharacter::OnHealthChanged);
@@ -74,9 +74,11 @@ void ASTUCharacter::OnDeath()
 		Controller->ChangeState(NAME_Spectating);
 	}
 
-	PlayAnimMontage(DeathAnimation);
+	//PlayAnimMontage(DeathAnimation);
 	SetLifeSpan(5.f);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetMesh()->SetSimulatePhysics(true);
 }
 
 void ASTUCharacter::Fire()
@@ -117,7 +119,7 @@ void ASTUCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ASTUCharacter::OnHealthChanged(float Value)
+void ASTUCharacter::OnHealthChanged(float Value, float Delta)
 {
 	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Value)));
 }

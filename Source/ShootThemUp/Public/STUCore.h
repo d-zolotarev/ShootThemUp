@@ -5,8 +5,39 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnClipEmptySignature, class ASTUWeapon*);
 DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHealthChanged, float, float);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnNotifiedSignature, const class USkeletalMeshComponent* const);
+
+USTRUCT(BlueprintType)
+struct FDecalData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	class UMaterialInterface* Material;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	FVector Size = FVector(10.f);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	float LifeTime = 5.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	float FadeOutTime = .7f;
+};
+
+USTRUCT(BlueprintType)
+struct FImpactData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	class UNiagaraSystem* NiagaraEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	FDecalData DecalData;
+};
+
 
 USTRUCT(BlueprintType)
 struct FAmmoData

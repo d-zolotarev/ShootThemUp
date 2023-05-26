@@ -63,7 +63,7 @@ private:
 	void MoveRight(float Value);
 	void Run();
 	FORCEINLINE void StopRunning() { bWantsToRun = false; }
-	void OnHealthChanged(float Value);
+	void OnHealthChanged(float Value, float Delta);
 	void OnDeath();
 	void Fire();
 

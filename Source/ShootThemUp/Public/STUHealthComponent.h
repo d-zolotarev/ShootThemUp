@@ -40,17 +40,20 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", meta = (ClampMin = "0.1", ClampMax = "100.0"))
 	float MaxHealth;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health | AutoHeal")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health|AutoHeal")
 	bool bAutoHealEnabled;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health | AutoHeal", meta = (EditCondition = "bAutoHealEnabled"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health|AutoHeal", meta = (EditCondition = "bAutoHealEnabled"))
 	float AutoHealDelay;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health | AutoHeal", meta = (EditCondition = "bAutoHealEnabled"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health|AutoHeal", meta = (EditCondition = "bAutoHealEnabled"))
 	float HealthUpdateRate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health | AutoHeal", meta = (EditCondition = "bAutoHealEnabled"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health|AutoHeal", meta = (EditCondition = "bAutoHealEnabled"))
 	float HealModifier;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	TSubclassOf<class UCameraShakeBase> CameraShake;
 
 	UFUNCTION()
 	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
@@ -58,6 +61,7 @@ protected:
 private:
 	void AutoHeal();
 	void SetHealth(float Value);
+	void PlayCameraShake();
 	FORCEINLINE bool IsHealthFull() const { return FMath::IsNearlyEqual(Health, MaxHealth); }
 
 private:

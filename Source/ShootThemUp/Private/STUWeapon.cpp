@@ -53,6 +53,7 @@ FHitResult ASTUWeapon::Hit() const
 	// Не стреляем сами в себя.
 	FCollisionQueryParams CollisionQueryParams;
 	CollisionQueryParams.AddIgnoredActor(GetOwner());
+	CollisionQueryParams.bReturnPhysicalMaterial = true;
 
 	FVector TraceStart, TraceEnd;
 	GetTraceFromCamera(TraceStart, TraceEnd);

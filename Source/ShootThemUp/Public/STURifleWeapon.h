@@ -21,6 +21,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage", meta = (ClampMin = "0.0", ClampMax = "100.0"))
 	float DamageAmount;
 
+	UPROPERTY(VisibleAnywhere, Category = "VFX")
+	class USTUWeaponFXComponent* WeaponFXComponent;
+
 public:
 	ASTURifleWeapon();
 

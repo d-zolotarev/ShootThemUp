@@ -4,6 +4,7 @@
 #include "STUHealthComponent.h"
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
+#include "Camera/CameraShakeBase.h"
 
 // Sets default values for this component's properties
 USTUHealthComponent::USTUHealthComponent() :
@@ -57,6 +58,8 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, co
 	{
 		GetWorld()->GetTimerManager().SetTimer(AutoHealTimerHandle, this, &USTUHealthComponent::AutoHeal, HealthUpdateRate, true, AutoHealDelay);
 	}
+
+	PlayCameraShake();
 }
 
 FORCEINLINE void USTUHealthComponent::SetHealth(float Value)
@@ -64,7 +67,20 @@ FORCEINLINE void USTUHealthComponent::SetHealth(float Value)
 	float OldHealth = Health;
 	Health = FMath::Clamp(Value, 0.f, MaxHealth);
 	if (!FMath::IsNearlyEqual(OldHealth, Health))
-		OnHealthChanged.Broadcast(Health);
+		OnHealthChanged.Broadcast(Health, Health - OldHealth);
+}
+
+void USTUHealthComponent::PlayCameraShake()
+{
+	if (IsDead()) return;
+
+	const APawn* const Pawn = Cast<APawn>(GetOwner());
+	if (!Pawn) return;
+
+	const APlayerController* const Controller = Pawn->GetController<APlayerController>();
+	if (!Controller || !Controller->PlayerCameraManager) return;
+
+	Controller->PlayerCameraManager->StartCameraShake(CameraShake);
 }
 
 void USTUHealthComponent::AutoHeal()

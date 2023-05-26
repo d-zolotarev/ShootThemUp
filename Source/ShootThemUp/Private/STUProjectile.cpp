@@ -6,9 +6,10 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "STUWeaponFXComponent.h"
 
 // Sets default values
-ASTUProjectile::ASTUProjectile() : DamageRadius{300.f}, DamageAmount{90.f}, LifeSpan{5.f}, bDoFullDamage{false}
+ASTUProjectile::ASTUProjectile() : LifeSpan{ 5.f }, DamageRadius{300.f}, DamageAmount{90.f}, bDoFullDamage{false}
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -18,11 +19,15 @@ ASTUProjectile::ASTUProjectile() : DamageRadius{300.f}, DamageAmount{90.f}, Life
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 	CollisionComponent->InitSphereRadius(5.f);
+	CollisionComponent->bReturnMaterialOnMove = true;
 	SetRootComponent(CollisionComponent);
 
 	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
 	check(MovementComponent);
 	MovementComponent->InitialSpeed = 2000.f;
+
+	WeaponFXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("WeaponFXComponent");
+	check(WeaponFXComponent);
 }
 
 // Called when the game starts or when spawned
@@ -40,7 +45,7 @@ void ASTUProjectile::OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* 
 	MovementComponent->StopMovementImmediately();
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), DamageAmount, GetActorLocation(), DamageRadius, UDamageType::StaticClass(),
 		{}, this, GetController(), bDoFullDamage);
-	DrawDebugSphere(GetWorld(), GetActorLocation(), DamageRadius, 24, FColor::Red, false, 5.f);
+	WeaponFXComponent->PlayImpactFX(Hit);
 	Destroy();
 }
 

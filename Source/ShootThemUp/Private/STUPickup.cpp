@@ -11,16 +11,11 @@ ASTUPickup::ASTUPickup() : RespawnTime{30.f}, Yaw{10.f}
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	SphereComponent = CreateDefaultSubobject<USphereComponent>("SphereComponent");
-	check(SphereComponent);
-	SphereComponent->InitSphereRadius(50.f);
-	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	SphereComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	SetRootComponent(SphereComponent);
-
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
 	check(StaticMesh);
-	StaticMesh->SetupAttachment(GetRootComponent());
+	StaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	StaticMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	SetRootComponent(StaticMesh);
 }
 
 // Called when the game starts or when spawned
@@ -69,7 +64,7 @@ FORCEINLINE void ASTUPickup::Respawn()
 
 FORCEINLINE void ASTUPickup::SetVisibility(bool bIsVisible)
 {
-	SphereComponent->SetCollisionResponseToAllChannels(bIsVisible ? ECollisionResponse::ECR_Overlap : ECollisionResponse::ECR_Ignore);
+	StaticMesh->SetCollisionResponseToAllChannels(bIsVisible ? ECollisionResponse::ECR_Overlap : ECollisionResponse::ECR_Ignore);
 	GetRootComponent()->SetVisibility(bIsVisible, true);
 }
 

@@ -22,9 +22,6 @@ protected:
 	virtual bool GivePickupTo(APawn *const PlayerPawn);
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
-	class USphereComponent* SphereComponent;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
 	class UStaticMeshComponent* StaticMesh;
 

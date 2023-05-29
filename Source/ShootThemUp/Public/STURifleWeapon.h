@@ -36,4 +36,7 @@ protected:
 
 private:
 	FTimerHandle FireTimerHandle;
+
+	UPROPERTY()
+	class UParticleSystemComponent* MuzzleFlashComp;
 };

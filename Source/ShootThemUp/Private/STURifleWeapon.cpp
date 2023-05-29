@@ -8,9 +8,10 @@
 #include "STUCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "STUWeaponFXComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 
-ASTURifleWeapon::ASTURifleWeapon() : FireRate{600.f}, DamageAmount{10.f}
+ASTURifleWeapon::ASTURifleWeapon() : FireRate{600.f}, DamageAmount{10.f}, MuzzleFlashComp {nullptr}
 {
 	DefaultAmmo = FAmmoData{30, 10, false};
 
@@ -20,12 +21,21 @@ ASTURifleWeapon::ASTURifleWeapon() : FireRate{600.f}, DamageAmount{10.f}
 
 void ASTURifleWeapon::Fire()
 {
+	if (MuzzleFlash && !MuzzleFlashComp)
+	{
+		MuzzleFlashComp = UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, GetRootComponent(), MuzzleSocketName, FVector::ZeroVector,
+			FRotator::ZeroRotator, EAttachLocation::SnapToTarget, false, EPSCPoolMethod::None, false);
+	}
+
+	if (MuzzleFlashComp) MuzzleFlashComp->ActivateSystem();
+
 	GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ASTURifleWeapon::MakeShot, 60.f / FireRate, true);
 	Super::Fire();
 }
 
 void ASTURifleWeapon::StopFiring()
 {
+	if (MuzzleFlashComp) MuzzleFlashComp->DeactivateSystem();
 	Super::StopFiring();
 	GetWorldTimerManager().ClearTimer(FireTimerHandle);
 }
@@ -46,5 +56,6 @@ void ASTURifleWeapon::MakeShot()
 		UE_LOG(LogTemp, Warning, TEXT("Hit %s"), *HitResult.BoneName.ToString());
 		WeaponFXComponent->PlayImpactFX(HitResult);
 	}
+
 	DecreaseAmmo();
 }

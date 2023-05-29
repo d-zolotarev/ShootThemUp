@@ -2,7 +2,6 @@
 
 
 #include "STUWeaponFXComponent.h"
-//#include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/DecalComponent.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
@@ -33,11 +32,6 @@ void USTUWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult)
 			ImpactData = ImpactDataMap[PhysMaterialRaw];
 		}
 	}
-
-	/*
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ImpactData.NiagaraEffect,
-		HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
-		*/
 
 	if (!ImpactData.ImpactEffect || !ImpactData.DecalData.Material) return;
 

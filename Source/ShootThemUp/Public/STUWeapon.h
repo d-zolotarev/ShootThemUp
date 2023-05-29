@@ -48,6 +48,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	FWeaponUIData UIData;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	class UParticleSystem* MuzzleFlash;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

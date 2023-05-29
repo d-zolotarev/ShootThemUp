@@ -30,4 +30,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	TMap<class UPhysicalMaterial*, FImpactData> ImpactDataMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	class UParticleSystem* MuzzleFlash;
 };

@@ -39,6 +39,8 @@ void USTUWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult)
 		HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
 		*/
 
+	if (!ImpactData.ImpactEffect || !ImpactData.DecalData.Material) return;
+
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactData.ImpactEffect, HitResult.ImpactPoint, HitResult.ImpactPoint.Rotation());
 
 	auto DecalComponent = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), ImpactData.DecalData.Material, ImpactData.DecalData.Size,
@@ -48,4 +50,5 @@ void USTUWeaponFXComponent::PlayImpactFX(const FHitResult& HitResult)
 		DecalComponent->SetFadeOut(ImpactData.DecalData.LifeTime, ImpactData.DecalData.FadeOutTime);
 	}
 }
+
 

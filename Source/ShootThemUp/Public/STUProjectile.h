@@ -39,7 +39,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "VFX")
 	class USTUWeaponFXComponent* WeaponFXComponent;
 
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

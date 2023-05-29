@@ -3,6 +3,7 @@
 
 #include "STULauncherWeapon.h"
 #include "STUProjectile.h"
+#include "Kismet/GameplayStatics.h"
 
 void ASTULauncherWeapon::MakeShot()
 {
@@ -26,4 +27,10 @@ void ASTULauncherWeapon::MakeShot()
 	}
 
 	DecreaseAmmo();
+
+	if (MuzzleFlash)
+	{
+		UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, GetRootComponent(), MuzzleSocketName, FVector::ZeroVector,
+			FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
+	}
 }

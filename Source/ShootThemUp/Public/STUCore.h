@@ -32,7 +32,7 @@ struct FImpactData
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	class UNiagaraSystem* NiagaraEffect;
+	class UParticleSystem* ImpactEffect;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	FDecalData DecalData;

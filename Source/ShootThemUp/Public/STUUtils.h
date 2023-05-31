@@ -7,7 +7,7 @@ class STUUtils
 {
 public:
 	template<typename T>
-	FORCEINLINE static T* GetComponentByClass(const class APawn* const PlayerPawn)
+	FORCEINLINE static T* GetComponentByClass(const class AActor* const PlayerPawn)
 	{
 		return PlayerPawn ? Cast<T>(PlayerPawn->GetComponentByClass(T::StaticClass())) : nullptr;
 	}

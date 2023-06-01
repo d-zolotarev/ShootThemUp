@@ -83,20 +83,24 @@ FORCEINLINE FVector ASTUWeapon::Scatter(const FVector& Direction) const
 	return FMath::VRandCone(Direction, FMath::DegreesToRadians(ScatterAngle * .5f));
 }
 
-FORCEINLINE APlayerController* ASTUWeapon::GetPlayerController() const
+void ASTUWeapon::GetPlayerViewPoint(FVector& Location, FRotator& Rotation) const
 {
-	const auto OwningCharacter = Cast<ACharacter>(GetOwner());
-	if (!OwningCharacter) return nullptr;
+	const ACharacter* const OwningCharacter = Cast<ACharacter>(GetOwner());
+	check(OwningCharacter);
 
-	return OwningCharacter->GetController<APlayerController>();
-}
+	if (OwningCharacter->IsPlayerControlled())
+	{
+		const APlayerController* const Controller = OwningCharacter->GetController<APlayerController>();
+		check(Controller);
 
-FORCEINLINE void ASTUWeapon::GetPlayerViewPoint(FVector& Location, FRotator& Rotation) const
-{
-	const auto Controller = GetPlayerController();
-	check(Controller);
-
-	Controller->GetPlayerViewPoint(Location, Rotation);
+		Controller->GetPlayerViewPoint(Location, Rotation);
+	}
+	else
+	{
+		const FTransform MuzzleSocketTransform = SkeletalMesh->GetSocketTransform(MuzzleSocketName);
+		Location = MuzzleSocketTransform.GetLocation();
+		Rotation = SkeletalMesh->GetSocketRotation(MuzzleSocketName);
+	}
 }
 
 FORCEINLINE void ASTUWeapon::GetMuzzleSocketPosition(FQuat& Rotation, FVector& Location) const

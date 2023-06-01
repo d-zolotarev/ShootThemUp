@@ -4,19 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "STUBaseService.h"
-#include "STUFindEnemyService.generated.h"
+#include "STUFireService.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SHOOTTHEMUP_API USTUFindEnemyService : public USTUBaseService
-
+class SHOOTTHEMUP_API USTUFireService : public USTUBaseService
 {
 	GENERATED_BODY()
 	
 public:
-	USTUFindEnemyService() { NodeName = "Find Enemy"; }
+	USTUFireService() { NodeName = "Fire"; }
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;

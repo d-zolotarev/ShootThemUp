@@ -57,7 +57,6 @@ protected:
 	virtual void MakeShot();
 	FHitResult Hit() const;
 	FVector Scatter(const FVector& Direction) const;
-	class APlayerController* GetPlayerController() const;
 	void GetPlayerViewPoint(FVector& Location, FRotator& Rotation) const;
 	void GetMuzzleSocketPosition(FQuat& Rotation, FVector& Location) const;
 	void GetTraceFromCamera(FVector& TraceStart, FVector& TraceEnd) const;

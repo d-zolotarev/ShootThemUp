@@ -25,6 +25,7 @@ public:
 	FORCEINLINE FWeaponUIData GetUIData() const { return UIData; }
 	FORCEINLINE FAmmoData GetCurrentAmmo() const { return CurrentAmmo; }
 	bool TryToAddAmmo(int32 ClipsAmount);
+	FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.Infinite && IsClipEmpty() && CurrentAmmo.Clips == 0; }
 
 public:
 	FOnClipEmptySignature OnClipEmpty;
@@ -62,7 +63,6 @@ protected:
 	void GetTraceFromCamera(FVector& TraceStart, FVector& TraceEnd) const;
 	FVector HitTraceEnd(const FHitResult& HitResult) const;
 	void DecreaseAmmo();
-	FORCEINLINE bool IsAmmoEmpty() const { return !CurrentAmmo.Infinite && IsClipEmpty() && CurrentAmmo.Clips == 0; }
 	FORCEINLINE bool IsClipEmpty() const { return CurrentAmmo.Bullets == 0; }
 
 private:

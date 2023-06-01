@@ -16,9 +16,9 @@ public:
 	// Sets default values for this component's properties
 	USTUWeaponComponent();
 
-	void Fire();
+	virtual void Fire();
 	void StopFiring();
-	void NextWeapon();
+	virtual void NextWeapon();
 	void Reload(class ASTUWeapon* Weapon);
 	bool IsFiring() const;
 	bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
@@ -43,30 +43,32 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
-private:
-	void SpawnWeapons();
-	void AttachWeaponToSocket(ASTUWeapon *const Weapon, USceneComponent *const Parent, const FName& SocketName);
-	void EquipWeapon(int32 WeaponIndex);
-	void PlayAnimMontage(UAnimMontage *const AnimMontage) const;
-	void InitAnimations();
-	void OnEquipFinished(const USkeletalMeshComponent *const MeshComp);
-	void OnReloadingFinished(const USkeletalMeshComponent* const MeshComp);
 	FORCEINLINE bool CanFire() const { return CurrentWeapon && CanEquip(); }
 	FORCEINLINE bool CanEquip() const { return !bEquipAnimInProgress && !bReloadingAnimInProgress; }
-	bool CanReload() const;
-	
-private:
+	void EquipWeapon(int32 WeaponIndex);
+
+protected:
 	UPROPERTY()
 	ASTUWeapon* CurrentWeapon;
 
 	UPROPERTY()
 	TArray<ASTUWeapon*> Weapons;
 
+	int32 CurrentWeaponIndex;
+
+private:
+	void SpawnWeapons();
+	void AttachWeaponToSocket(ASTUWeapon *const Weapon, USceneComponent *const Parent, const FName& SocketName);
+	void PlayAnimMontage(UAnimMontage *const AnimMontage) const;
+	void InitAnimations();
+	void OnEquipFinished(const USkeletalMeshComponent *const MeshComp);
+	void OnReloadingFinished(const USkeletalMeshComponent* const MeshComp);
+	bool CanReload() const;
+	
+private:
 	UPROPERTY()
 	UAnimMontage* CurrentReloadAnimMontage;
 
-	int32 CurrentWeaponIndex;
 	bool bEquipAnimInProgress;
 	bool bReloadingAnimInProgress;
 };

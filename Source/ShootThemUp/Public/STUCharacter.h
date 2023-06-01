@@ -48,6 +48,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void OnDeath();
 
 public:	
 	// Called every frame
@@ -64,7 +65,6 @@ private:
 	void Run();
 	FORCEINLINE void StopRunning() { bWantsToRun = false; }
 	void OnHealthChanged(float Value, float Delta);
-	void OnDeath();
 	void Fire();
 
 private:

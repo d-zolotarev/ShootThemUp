@@ -32,6 +32,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	FORCEINLINE bool CouldBeTaken() const { return PickupCouldBeTaken; }
 
 private:
 	void PickupWasTaken();
@@ -41,4 +42,5 @@ private:
 
 private:
 	float Yaw;
+	bool PickupCouldBeTaken;
 };

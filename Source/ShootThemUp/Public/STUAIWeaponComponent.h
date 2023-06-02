@@ -17,4 +17,5 @@ class SHOOTTHEMUP_API USTUAIWeaponComponent : public USTUWeaponComponent
 public:
 	virtual void Fire() override;
 	virtual void NextWeapon() override;
+	bool IsWeaponAmmoEmpty(TSubclassOf<class ASTUWeapon> WeaponClass) const;
 };

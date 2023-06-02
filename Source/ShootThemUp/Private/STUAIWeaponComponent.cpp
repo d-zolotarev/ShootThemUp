@@ -27,3 +27,14 @@ void USTUAIWeaponComponent::NextWeapon()
 		EquipWeapon(CurrentWeaponIndex);
 	}
 }
+
+bool USTUAIWeaponComponent::IsWeaponAmmoEmpty(TSubclassOf<ASTUWeapon> WeaponClass) const
+{
+	for (const ASTUWeapon* const Weapon : Weapons)
+	{
+		if (Weapon->IsA(WeaponClass) && Weapon->IsAmmoEmpty())
+			return true;
+	}
+
+	return false;
+}

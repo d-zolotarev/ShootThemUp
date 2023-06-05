@@ -53,7 +53,7 @@ void ASTURifleWeapon::MakeShot()
 		TSubclassOf<UDamageType> DamageType;
 		UGameplayStatics::ApplyPointDamage(HitResult.GetActor(), DamageAmount, HitResult.ImpactNormal, HitResult,
 			GetOwner()->GetInstigatorController(), this, DamageType);
-		UE_LOG(LogTemp, Warning, TEXT("Hit %s"), *HitResult.BoneName.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("Hit %s"), *HitResult.BoneName.ToString());
 		WeaponFXComponent->PlayImpactFX(HitResult);
 	}
 

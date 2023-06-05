@@ -41,6 +41,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class USTUWeaponComponent* WeaponComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Material")
+	FName MaterialColorParameter;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool IsRunning() const { return bWantsToRun && bIsMovingForward && !GetVelocity().IsNearlyZero(); }
@@ -58,6 +61,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void Landed(const FHitResult& Hit) override;
+
+	void SetPlayerColor(const FLinearColor& Color);
 
 private:
 	void MoveForward(float Value);

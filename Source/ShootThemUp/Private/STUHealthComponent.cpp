@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "TimerManager.h"
 #include "Camera/CameraShakeBase.h"
+#include "STUUtils.h"
+#include "../ShootThemUpGameModeBase.h"
 
 // Sets default values for this component's properties
 USTUHealthComponent::USTUHealthComponent() :
@@ -46,12 +48,20 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, co
 {
 	GetWorld()->GetTimerManager().ClearTimer(AutoHealTimerHandle);
 
-	if (Damage <= 0.f || IsDead()) return;
+	const APawn* const Pawn = Cast<APawn>(GetOwner());
+	AController* const Controller = Pawn ? Pawn->GetController() : nullptr;
+
+	if (Damage <= 0.f || IsDead() || !STUUtils::AreEnemies(InstigatedBy, Controller)) return;
 	
 	SetHealth(Health - Damage);
 
 	if (IsDead())
 	{
+		if (AShootThemUpGameModeBase* const GameMode = Cast<AShootThemUpGameModeBase>(GetWorld()->GetAuthGameMode()))
+		{
+			GameMode->Killed(InstigatedBy, Controller);
+		}
+
 		OnDeath.Broadcast();
 	}
 	else if (bAutoHealEnabled)

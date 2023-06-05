@@ -9,10 +9,10 @@
 
 AActor* USTUAIPerceptionComponent::GetClosestEnemy() const
 {
-	TArray<AActor*> PercieveActors;
-	GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PercieveActors);
+	TArray<AActor*> PercievedActors;
+	GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PercievedActors);
 	
-	if (PercieveActors.Num() == 0) return nullptr;
+	if (PercievedActors.Num() == 0) return nullptr;
 
 	const AAIController* const Controller = Cast<AAIController>(GetOwner());
 	if (!Controller) return nullptr;
@@ -23,16 +23,20 @@ AActor* USTUAIPerceptionComponent::GetClosestEnemy() const
 	float MinDistance = MAX_FLT;
 	AActor* ClosestActor = nullptr;
 
-	for (AActor* const Actor : PercieveActors)
+	for (AActor* const PercievedActor : PercievedActors)
 	{
-		const USTUHealthComponent* const HealthComp = STUUtils::GetComponentByClass<USTUHealthComponent>(Actor);
-		if (HealthComp && !HealthComp->IsDead())
+		const USTUHealthComponent* const HealthComp = STUUtils::GetComponentByClass<USTUHealthComponent>(PercievedActor);
+
+		const APawn* const PercievedPawn = Cast<APawn>(PercievedActor);
+		const bool bAreEnemies = PercievedPawn && STUUtils::AreEnemies(Controller, PercievedPawn->Controller);
+
+		if (HealthComp && !HealthComp->IsDead() && bAreEnemies)
 		{
-			float Distance = FVector::DistSquared(Actor->GetActorLocation(), Pawn->GetActorLocation());
+			float Distance = FVector::DistSquared(PercievedActor->GetActorLocation(), Pawn->GetActorLocation());
 			if (Distance < MinDistance)
 			{
 				MinDistance = Distance;
-				ClosestActor = Actor;
+				ClosestActor = PercievedActor;
 			}
 		}
 	}

@@ -11,6 +11,8 @@ ASTUAIController::ASTUAIController() : FocusOnKeyName{"EnemyActor"}
 	STUPerceptionComponent = CreateDefaultSubobject<USTUAIPerceptionComponent>("STUPerceptionComponent");
 	check(STUPerceptionComponent);
 	SetPerceptionComponent(*STUPerceptionComponent);
+
+	bWantsPlayerState = true;
 }
 
 void ASTUAIController::Tick(float DeltaTime)

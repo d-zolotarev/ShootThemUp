@@ -22,6 +22,9 @@ public:
 	virtual void StartPlay() override;
 	virtual UClass* GetDefaultPawnClassForController_Implementation(class AController* Controller) override;
 	void Killed(class AController* const KillerController, class AController* const VictimController);
+	FORCEINLINE int32 GetCurrentRound() const { return CurrentRound; }
+	FORCEINLINE float GetRoundElapsedTime() const { return RoundElapsedTime; }
+	FORCEINLINE int32 GetTotalRounds() const { return GameData.RoundsNum; }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")

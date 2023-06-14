@@ -15,8 +15,8 @@ static constexpr int32 MaxWeapons = 2;
 // Sets default values for this component's properties
 USTUWeaponComponent::USTUWeaponComponent() :
 	CurrentWeapon{nullptr},
-	CurrentReloadAnimMontage{nullptr},
 	CurrentWeaponIndex{0},
+	CurrentReloadAnimMontage{ nullptr },
 	bEquipAnimInProgress{false},
 	bReloadingAnimInProgress{false}
 {

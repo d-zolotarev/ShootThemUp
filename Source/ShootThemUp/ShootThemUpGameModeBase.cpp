@@ -66,8 +66,6 @@ FORCEINLINE void AShootThemUpGameModeBase::StartRound()
 
 void AShootThemUpGameModeBase::RoundTimerUpdate()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Current Round: %d/%d, Elapsed Time: %.0f"), CurrentRound, GameData.RoundsNum, RoundElapsedTime);
-
 	RoundElapsedTime -= GetWorldTimerManager().GetTimerRate(RoundTimerHandle);
 
 	if (FMath::IsNearlyZero(RoundElapsedTime))
@@ -78,19 +76,6 @@ void AShootThemUpGameModeBase::RoundTimerUpdate()
 			++CurrentRound;
 			ResetPlayers();
 			StartRound();
-		}
-		else
-		{
-			for (auto It = GetWorld()->GetControllerIterator(); It; ++It)
-			{
-				if (const ASTUPlayerState* const PlayerState = Cast<ASTUPlayerState>(It->Get()->PlayerState))
-				{
-					UE_LOG(LogTemp, Warning, TEXT("TeamID: %d, Kills: %d, Deaths: %d"),
-						PlayerState->GetTeamID(), PlayerState->GetKillsNum(), PlayerState->GetDeathsNum());
-				}
-			}
-
-			UE_LOG(LogTemp, Warning, TEXT("GAME OVER"));
 		}
 	}
 }
@@ -108,7 +93,6 @@ void AShootThemUpGameModeBase::ResetPlayers()
 
 void AShootThemUpGameModeBase::ResetPlayer(AController* const Controller)
 {
-	//Controller->GetPawn()->Reset();
 	RestartPlayer(Controller);
 	SetPlayerColor(Cast<ASTUCharacter>(Controller->GetPawn()), Cast<ASTUPlayerState>(Controller->PlayerState));
 }
@@ -121,8 +105,6 @@ void AShootThemUpGameModeBase::CreateTeams()
 	int32 TeamID = 1;
 	for (auto It = World->GetControllerIterator(); It; ++It)
 	{
-		//if (!It->IsValid()) continue;
-
 		AController* const Controller = It->Get();
 
 		ASTUPlayerState* const PlayerState = Cast<ASTUPlayerState>(Controller->PlayerState);

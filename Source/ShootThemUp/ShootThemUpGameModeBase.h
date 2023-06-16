@@ -21,7 +21,11 @@ public:
 public:
 	virtual void StartPlay() override;
 	virtual UClass* GetDefaultPawnClassForController_Implementation(class AController* Controller) override;
+
+public:
 	void Killed(class AController* const KillerController, class AController* const VictimController);
+	void RespawnRequest(AController* const Controller);
+	
 	FORCEINLINE int32 GetCurrentRound() const { return CurrentRound; }
 	FORCEINLINE float GetRoundElapsedTime() const { return RoundElapsedTime; }
 	FORCEINLINE int32 GetTotalRounds() const { return GameData.RoundsNum; }
@@ -45,6 +49,7 @@ private:
 	void CreateTeams();
 	FLinearColor GetTeamColorByID(int32 TeamID) const;
 	void SetPlayerColor(class ASTUCharacter* const Character, const class ASTUPlayerState* const PlayerState) const;
+	void StartRespawn(AController* const Controller);
 
 private:
 	int32 CurrentRound = 1;

@@ -7,6 +7,8 @@
 #include "STUHUD.h"
 #include "STUCharacter.h"
 #include "STUPlayerController.h"
+#include "STUUtils.h"
+#include "STURespawnComponent.h"
 
 AShootThemUpGameModeBase::AShootThemUpGameModeBase()
 {
@@ -41,6 +43,13 @@ void AShootThemUpGameModeBase::Killed(AController* const KillerController, ACont
 
 	if (KillerPlayerState) KillerPlayerState->AddKill();
 	if (VictimPlayerState) VictimPlayerState->AddDeath();
+
+	StartRespawn(VictimController);
+}
+
+FORCEINLINE void AShootThemUpGameModeBase::RespawnRequest(AController* const Controller)
+{
+	ResetPlayer(Controller);
 }
 
 void AShootThemUpGameModeBase::SpawnBots()
@@ -99,13 +108,13 @@ void AShootThemUpGameModeBase::ResetPlayer(AController* const Controller)
 
 void AShootThemUpGameModeBase::CreateTeams()
 {
-	UWorld* const World = GetWorld();
+	const UWorld* const World = GetWorld();
 	if (!World) return;
 
 	int32 TeamID = 1;
 	for (auto It = World->GetControllerIterator(); It; ++It)
 	{
-		AController* const Controller = It->Get();
+		const AController* const Controller = It->Get();
 
 		ASTUPlayerState* const PlayerState = Cast<ASTUPlayerState>(Controller->PlayerState);
 		if (!PlayerState) continue;
@@ -121,11 +130,22 @@ void AShootThemUpGameModeBase::CreateTeams()
 
 FORCEINLINE FLinearColor AShootThemUpGameModeBase::GetTeamColorByID(int32 TeamID) const
 {
-	return GameData.TeamColors.IsValidIndex(TeamID - 1) ? GameData.TeamColors[TeamID - 1] : GameData.DefaultTeamColor;
+	int32 Index = TeamID - 1;
+	return GameData.TeamColors.IsValidIndex(Index) ? GameData.TeamColors[Index] : GameData.DefaultTeamColor;
 }
 
 FORCEINLINE void AShootThemUpGameModeBase::SetPlayerColor(ASTUCharacter* const Character, const ASTUPlayerState* const PlayerState) const
 {
-	if (Character && PlayerState)
-		Character->SetPlayerColor(PlayerState->GetTeamColor());
+	if (Character && PlayerState) Character->SetPlayerColor(PlayerState->GetTeamColor());
+}
+
+FORCEINLINE void AShootThemUpGameModeBase::StartRespawn(AController* const Controller)
+{
+	if (Controller && RoundElapsedTime > GameData.MinElapsedTimeForRespawn + GameData.RespawnTime)
+	{
+		if (USTURespawnComponent* const RespawnComp = Controller->FindComponentByClass<USTURespawnComponent>())
+		{
+			RespawnComp->Respawn(GameData.RespawnTime);
+		}
+	}
 }

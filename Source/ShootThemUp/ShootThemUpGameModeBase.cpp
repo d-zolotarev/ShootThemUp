@@ -9,6 +9,7 @@
 #include "STUPlayerController.h"
 #include "STUUtils.h"
 #include "STURespawnComponent.h"
+#include "EngineUtils.h"
 
 AShootThemUpGameModeBase::AShootThemUpGameModeBase()
 {
@@ -80,11 +81,14 @@ void AShootThemUpGameModeBase::RoundTimerUpdate()
 	if (FMath::IsNearlyZero(RoundElapsedTime))
 	{
 		GetWorldTimerManager().ClearTimer(RoundTimerHandle);
-		if (CurrentRound != GameData.RoundsNum)
+		if (++CurrentRound <= GameData.RoundsNum)
 		{
-			++CurrentRound;
 			ResetPlayers();
 			StartRound();
+		}
+		else
+		{
+			GameOver();
 		}
 	}
 }
@@ -146,6 +150,18 @@ FORCEINLINE void AShootThemUpGameModeBase::StartRespawn(AController* const Contr
 		if (USTURespawnComponent* const RespawnComp = Controller->FindComponentByClass<USTURespawnComponent>())
 		{
 			RespawnComp->Respawn(GameData.RespawnTime);
+		}
+	}
+}
+
+void AShootThemUpGameModeBase::GameOver()
+{
+	for (auto Pawn : TActorRange<APawn>(GetWorld()))
+	{
+		if (Pawn)
+		{
+			Pawn->TurnOff();
+			Pawn->DisableInput(nullptr);
 		}
 	}
 }

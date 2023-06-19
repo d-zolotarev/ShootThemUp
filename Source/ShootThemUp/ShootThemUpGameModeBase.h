@@ -50,6 +50,7 @@ private:
 	FLinearColor GetTeamColorByID(int32 TeamID) const;
 	void SetPlayerColor(class ASTUCharacter* const Character, const class ASTUPlayerState* const PlayerState) const;
 	void StartRespawn(AController* const Controller);
+	void GameOver();
 
 private:
 	int32 CurrentRound = 1;

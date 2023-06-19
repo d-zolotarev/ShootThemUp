@@ -18,6 +18,8 @@ public:
 
 public:
 	void Respawn(int32 RespawnTime);
+	int32 GetRespawnCountDown() const { return RespawnCountDown; }
+	bool IsRespawnInProgress() const { return GetWorld()->GetTimerManager().IsTimerActive(RespawnTimerHandle); }
 
 protected:
 	// Called when the game starts

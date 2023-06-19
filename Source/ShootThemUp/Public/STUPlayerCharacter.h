@@ -27,10 +27,21 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera Setting | Camera Options")
 	class UCameraComponent* Camera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
+	class USphereComponent* CameraCollisionComponent;
+
 protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void OnDeath() override;
+	virtual void BeginPlay() override;
+
+private:
+	UFUNCTION()
+	void OnCameraCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnCameraCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
 	void MoveForward(float Value);
@@ -38,7 +49,7 @@ private:
 	void Run();
 	FORCEINLINE void StopRunning() { bWantsToRun = false; }
 	void Fire();
-
+	void CheckCameraOverlap();
 
 private:
 	bool bWantsToRun = false;

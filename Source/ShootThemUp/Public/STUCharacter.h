@@ -16,18 +16,19 @@ public:
 	// Sets default values for this character's properties
 	explicit ASTUCharacter(const FObjectInitializer& ObjectInitializer);
 
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+	virtual void Landed(const FHitResult& Hit) override;
+	void SetPlayerColor(const FLinearColor& Color);
+
+public:
+	UFUNCTION(BlueprintCallable)
+	virtual bool IsRunning() const { return false; }
+
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera Settings | Camera Boom")
-	class USpringArmComponent* CameraBoom;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera Setting | Camera Options")
-	class UCameraComponent* Camera;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Health")
 	class USTUHealthComponent* HealthComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Health")
-	class UTextRenderComponent* HealthTextComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animation")
 	class UAnimMontage* DeathAnimation;
@@ -44,35 +45,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Material")
 	FName MaterialColorParameter;
 
-public:
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsRunning() const { return bWantsToRun && bIsMovingForward && !GetVelocity().IsNearlyZero(); }
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void OnDeath();
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	virtual void Landed(const FHitResult& Hit) override;
-
-	void SetPlayerColor(const FLinearColor& Color);
-
-private:
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-	void Run();
-	FORCEINLINE void StopRunning() { bWantsToRun = false; }
-	void OnHealthChanged(float Value, float Delta);
-	void Fire();
-
-private:
-	bool bWantsToRun;
-	bool bIsMovingForward;
 };

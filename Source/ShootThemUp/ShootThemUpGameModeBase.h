@@ -21,6 +21,8 @@ public:
 public:
 	virtual void StartPlay() override;
 	virtual UClass* GetDefaultPawnClassForController_Implementation(class AController* Controller) override;
+	virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate = FCanUnpause()) override;
+	virtual bool ClearPause() override;
 
 public:
 	void Killed(class AController* const KillerController, class AController* const VictimController);
@@ -29,6 +31,9 @@ public:
 	FORCEINLINE int32 GetCurrentRound() const { return CurrentRound; }
 	FORCEINLINE float GetRoundElapsedTime() const { return RoundElapsedTime; }
 	FORCEINLINE int32 GetTotalRounds() const { return GameData.RoundsNum; }
+
+public:
+	FOnMatchStateChangedSignature OnMatchStateChanged;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
@@ -51,9 +56,11 @@ private:
 	void SetPlayerColor(class ASTUCharacter* const Character, const class ASTUPlayerState* const PlayerState) const;
 	void StartRespawn(AController* const Controller);
 	void GameOver();
+	void SetMatchState(ESTUMatchState NewMatchState);
 
 private:
 	int32 CurrentRound = 1;
 	float RoundElapsedTime;
 	FTimerHandle RoundTimerHandle;
+	ESTUMatchState MatchState = ESTUMatchState::WaitingToStart;
 };

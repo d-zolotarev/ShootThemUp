@@ -5,6 +5,7 @@
 #include "Engine/Canvas.h"
 #include "Blueprint/UserWidget.h"
 #include "STUPlayerHUDWidget.h"
+#include "../ShootThemUpGameModeBase.h"
 
 void ASTUHUD::DrawHUD()
 {
@@ -15,6 +16,30 @@ void ASTUHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (auto PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass))
-		PlayerHUDWidget->AddToViewport();
+	Widgets.Add(ESTUMatchState::InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass));
+	Widgets.Add(ESTUMatchState::Pause, CreateWidget<UUserWidget>(GetWorld(), PauseWidgetClass));
+	//Widgets.Add(ESTUMatchState::GameOver, CreateWidget<UUserWidget>(GetWorld(), GameOverWidgetClass));
+
+	for (auto WidgetPair : Widgets)
+	{
+		if (UUserWidget* const Widget = WidgetPair.Value)
+		{
+			Widget->AddToViewport();
+			Widget->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
+
+	if (AShootThemUpGameModeBase* const GameMode = GetWorld() ? Cast<AShootThemUpGameModeBase>(GetWorld()->GetAuthGameMode()) : nullptr)
+		GameMode->OnMatchStateChanged.AddUObject(this, &ASTUHUD::MatchStateChanged);
+}
+
+void ASTUHUD::MatchStateChanged(ESTUMatchState State)
+{
+	if (CurrentWidget) CurrentWidget->SetVisibility(ESlateVisibility::Hidden);
+
+	if (UUserWidget** Widget = Widgets.Find(State))
+	{
+		CurrentWidget = *Widget;
+		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
+	}
 }

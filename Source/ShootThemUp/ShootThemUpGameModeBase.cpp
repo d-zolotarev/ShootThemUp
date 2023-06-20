@@ -28,11 +28,35 @@ void AShootThemUpGameModeBase::StartPlay()
 
 	CurrentRound = 1;
 	StartRound();
+
+	SetMatchState(ESTUMatchState::InProgress);
 }
 
 UClass* AShootThemUpGameModeBase::GetDefaultPawnClassForController_Implementation(AController* Controller)
 {
 	return Controller && Controller->IsA<AAIController>() ? AIPawnClass : Super::GetDefaultPawnClassForController_Implementation(Controller);
+}
+
+bool AShootThemUpGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate)
+{
+	if (Super::SetPause(PC, CanUnpauseDelegate))
+	{
+		SetMatchState(ESTUMatchState::Pause);
+		return true;
+	}
+	
+	return false;
+}
+
+bool AShootThemUpGameModeBase::ClearPause()
+{
+	if (Super::ClearPause())
+	{
+		SetMatchState(ESTUMatchState::InProgress);
+		return true;
+	}
+
+	return false;
 }
 
 void AShootThemUpGameModeBase::Killed(AController* const KillerController, AController* const VictimController)
@@ -163,5 +187,16 @@ void AShootThemUpGameModeBase::GameOver()
 			Pawn->TurnOff();
 			Pawn->DisableInput(nullptr);
 		}
+	}
+
+	SetMatchState(ESTUMatchState::GameOver);
+}
+
+FORCEINLINE void AShootThemUpGameModeBase::SetMatchState(ESTUMatchState NewMatchState)
+{
+	if (MatchState != NewMatchState)
+	{
+		MatchState = NewMatchState;
+		OnMatchStateChanged.Broadcast(MatchState);
 	}
 }

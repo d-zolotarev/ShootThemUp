@@ -87,8 +87,14 @@ void AShootThemUpGameModeBase::SpawnBots()
 
 	for (int32 i = 0; i < GameData.PlayersNum - 1; ++i)
 	{
-		AAIController* const AIController = World->SpawnActor<AAIController>(AIControllerClass, SpawnParams);
-		RestartPlayer(AIController);
+		if (AAIController* const AIController = World->SpawnActor<AAIController>(AIControllerClass, SpawnParams))
+		{
+			if (ASTUPlayerState* const PlayerState = Cast<ASTUPlayerState>(AIController->PlayerState))
+			{
+				PlayerState->SetPlayerName(FString::Printf(TEXT("Bot %d"), i + 1));
+			}
+			RestartPlayer(AIController);
+		}
 	}
 }
 
@@ -143,12 +149,15 @@ void AShootThemUpGameModeBase::CreateTeams()
 	for (auto It = World->GetControllerIterator(); It; ++It)
 	{
 		const AController* const Controller = It->Get();
+		if (!Controller) continue;
 
 		ASTUPlayerState* const PlayerState = Cast<ASTUPlayerState>(Controller->PlayerState);
 		if (!PlayerState) continue;
 
 		PlayerState->SetTeamID(TeamID);
 		PlayerState->SetTeamColor(GetTeamColorByID(TeamID));
+		if (Controller->IsPlayerController() && PlayerState->GetPlayerName().IsEmpty())
+			PlayerState->SetPlayerName(TEXT("Player"));
 		
 		SetPlayerColor(Cast<ASTUCharacter>(Controller->GetPawn()), PlayerState);
 

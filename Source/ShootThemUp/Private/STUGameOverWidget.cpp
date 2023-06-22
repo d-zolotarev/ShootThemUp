@@ -6,14 +6,8 @@
 #include "STUPlayerState.h"
 #include "PlayerStatRowWidget.h"
 #include "Components/VerticalBox.h"
-
-bool USTUGameOverWidget::Initialize()
-{
-	if (AShootThemUpGameModeBase* const GameMode = GetWorld() ? Cast<AShootThemUpGameModeBase>(GetWorld()->GetAuthGameMode()) : nullptr)
-		GameMode->OnMatchStateChanged.AddUObject(this, &USTUGameOverWidget::OnMatchStateChanged);
-
-	return UUserWidget::Initialize();
-}
+#include "Components/Button.h"
+#include "Kismet/GameplayStatics.h"
 
 FORCEINLINE void USTUGameOverWidget::OnMatchStateChanged(ESTUMatchState State)
 {
@@ -21,6 +15,16 @@ FORCEINLINE void USTUGameOverWidget::OnMatchStateChanged(ESTUMatchState State)
 	{
 		UpdateStat();
 	}
+}
+
+void USTUGameOverWidget::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	if (AShootThemUpGameModeBase* const GameMode = GetWorld() ? Cast<AShootThemUpGameModeBase>(GetWorld()->GetAuthGameMode()) : nullptr)
+		GameMode->OnMatchStateChanged.AddUObject(this, &USTUGameOverWidget::OnMatchStateChanged);
+
+	if (RestartLevelButton) RestartLevelButton->OnClicked.AddDynamic(this, &USTUGameOverWidget::OnRestartLevel);
 }
 
 void USTUGameOverWidget::UpdateStat()
@@ -48,4 +52,9 @@ void USTUGameOverWidget::UpdateStat()
 			}
 		}
 	}
+}
+
+FORCEINLINE void USTUGameOverWidget::OnRestartLevel()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), FName(UGameplayStatics::GetCurrentLevelName(GetWorld())));
 }

@@ -15,15 +15,22 @@ class SHOOTTHEMUP_API USTUGameOverWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-public:
-	virtual bool Initialize() override;
-
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class UVerticalBox* PlayerStatBox;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* RestartLevelButton;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> PlayerStatRowWidgetClass;
+
+protected:
+	virtual void NativeOnInitialized() override;
+
+private:
+	UFUNCTION()
+	void OnRestartLevel();
 
 private:
 	void OnMatchStateChanged(ESTUMatchState State);

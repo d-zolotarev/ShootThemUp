@@ -13,5 +13,11 @@ UCLASS()
 class SHOOTTHEMUP_API ASTUMainMenuHUD : public AHUD
 {
 	GENERATED_BODY()
-	
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> MainMenuWidgetClass;
+
+protected:
+	virtual void BeginPlay() override;
 };

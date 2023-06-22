@@ -14,4 +14,14 @@ class SHOOTTHEMUP_API USTUMainMenuWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(meta = (BindWidget))
+	class UButton* StartGameButton;
+
+protected:
+	virtual void NativeOnInitialized() override;
+
+private:
+	UFUNCTION()
+	void OnStartGame();
 };

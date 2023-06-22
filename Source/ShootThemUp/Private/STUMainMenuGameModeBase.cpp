@@ -2,4 +2,11 @@
 
 
 #include "STUMainMenuGameModeBase.h"
+#include "STUMainMenuPlayerController.h"
+#include "STUMainMenuHUD.h"
 
+ASTUMainMenuGameModeBase::ASTUMainMenuGameModeBase()
+{
+	PlayerControllerClass = ASTUMainMenuPlayerController::StaticClass();
+	HUDClass = ASTUMainMenuHUD::StaticClass();
+}

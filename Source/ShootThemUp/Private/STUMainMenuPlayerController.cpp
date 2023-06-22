@@ -3,3 +3,10 @@
 
 #include "STUMainMenuPlayerController.h"
 
+void ASTUMainMenuPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetInputMode(FInputModeUIOnly());
+	bShowMouseCursor = true;
+}

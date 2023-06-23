@@ -121,3 +121,20 @@ enum class ESTUMatchState : uint8
 };
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnMatchStateChangedSignature, ESTUMatchState);
+
+USTRUCT(BlueprintType)
+struct FMapData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
+	FName MapName{NAME_None};
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
+	FName MapDisplayName{NAME_None};
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
+	UTexture2D* MapThumbnail{nullptr};
+};
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMapSelectedSignature, const FMapData&);

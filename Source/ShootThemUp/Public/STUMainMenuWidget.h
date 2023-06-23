@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "STUCore.h"
 #include "STUMainMenuWidget.generated.h"
 
 /**
@@ -21,6 +22,12 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* QuitGameButton;
 
+	UPROPERTY(meta = (BindWidget))
+	class UHorizontalBox* MapsHorizontalBox;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<class USTUMapItemWidget> MapItemWidgetClass;
+
 protected:
 	virtual void NativeOnInitialized() override;
 
@@ -30,4 +37,13 @@ private:
 
 	UFUNCTION()
 	void OnQuitGame();
+
+private:
+	void InitMapItems();
+	void OnMapSelected(const FMapData& SelectedMapData);
+	class USTUGameInstance* GetGameInstance() const;
+
+private:
+	UPROPERTY()
+	TArray<class USTUMapItemWidget*> MapItemWidgets;
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "STUCore.h"
 #include "STUGameInstance.generated.h"
 
 DECLARE_LOG_CATEGORY_CLASS(STUGameInstanceLog, All, All)
@@ -17,13 +18,18 @@ class SHOOTTHEMUP_API USTUGameInstance : public UGameInstance
 	GENERATED_BODY()
 	
 public:
-	FName GetStartupLevelName() const;
+	FMapData GetStartupLevel() const { return StartupLevel; }
+	void SetStartupLevel(const FMapData& NewStartupLevel) { StartupLevel = NewStartupLevel; }
 	FName GetMainMenuLevelName() const;
+	TArray<FMapData> GetMapsData() const { return MapsData; }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
-	FName StartupLevelName{NAME_None};
+	TArray<FMapData> MapsData;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
 	FName MainMenuLevelName{"MainMenuLevel"};
+
+private:
+	FMapData StartupLevel;
 };

@@ -7,6 +7,9 @@
 #include "STUAIWeaponComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BrainComponent.h"
+#include "STUHealthComponent.h"
+#include "Components/WidgetComponent.h"
+#include "STUHealthBarWidget.h"
 
 ASTUAICharacter::ASTUAICharacter(const FObjectInitializer& ObjectInitializer) :
 	Super(ObjectInitializer.SetDefaultSubobjectClass<USTUAIWeaponComponent>("WeaponComponent"))
@@ -20,6 +23,24 @@ ASTUAICharacter::ASTUAICharacter(const FObjectInitializer& ObjectInitializer) :
 	check(MovementComponent);
 	MovementComponent->bUseControllerDesiredRotation = true;
 	MovementComponent->RotationRate = FRotator(0.f, 200.f, 0.f);
+
+	HealthBarWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("HealthBarWidgetComponent");
+	check(HealthBarWidgetComponent);
+	HealthBarWidgetComponent->SetupAttachment(GetRootComponent());
+	HealthBarWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
+	HealthBarWidgetComponent->SetDrawAtDesiredSize(true);
+}
+
+void ASTUAICharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GetWorld() && GetWorld()->GetFirstPlayerController() && GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator())
+	{
+		const auto PlayerLocation = GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator()->GetActorLocation();
+		const float DistSquared = FVector::DistSquared(PlayerLocation, GetActorLocation());
+		HealthBarWidgetComponent->SetVisibility(DistSquared < FMath::Square(HealthVisibilityDistance), true);
+	}
 }
 
 void ASTUAICharacter::OnDeath()
@@ -30,5 +51,20 @@ void ASTUAICharacter::OnDeath()
 	if (AIController && AIController->BrainComponent)
 	{
 		AIController->BrainComponent->Cleanup();
+	}
+}
+
+void ASTUAICharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (HealthComponent) HealthComponent->OnHealthChanged.AddUObject(this, &ASTUAICharacter::OnHealthChanged);
+}
+
+FORCEINLINE void ASTUAICharacter::OnHealthChanged(float Health, float DeltaHealth)
+{
+	if (USTUHealthBarWidget* const HealthBarWidget = Cast<USTUHealthBarWidget>(HealthBarWidgetComponent->GetUserWidgetObject()))
+	{
+		HealthBarWidget->SetHealthPercent(HealthComponent->GetHealthPercent());
 	}
 }

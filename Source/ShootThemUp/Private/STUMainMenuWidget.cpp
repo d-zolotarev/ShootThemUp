@@ -22,12 +22,17 @@ void USTUMainMenuWidget::NativeOnInitialized()
 	InitMapItems();
 }
 
-FORCEINLINE void USTUMainMenuWidget::OnStartGame()
+void USTUMainMenuWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation)
 {
-	if (const USTUGameInstance* const GameInstance = GetGameInstance())
+	if (const USTUGameInstance* const GameInstance = GetGameInstance(); (Animation == LoadingAnimation) && GameInstance)
 	{
 		UGameplayStatics::OpenLevel(GetWorld(), GameInstance->GetStartupLevel().MapName);
 	}
+}
+
+FORCEINLINE void USTUMainMenuWidget::OnStartGame()
+{
+	PlayAnimation(LoadingAnimation);
 }
 
 FORCEINLINE void USTUMainMenuWidget::OnQuitGame()

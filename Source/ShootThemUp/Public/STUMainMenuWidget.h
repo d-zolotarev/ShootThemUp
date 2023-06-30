@@ -28,8 +28,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<class USTUMapItemWidget> MapItemWidgetClass;
 
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	UWidgetAnimation* LoadingAnimation;
+
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void OnAnimationFinished_Implementation(const UWidgetAnimation* Animation) override;
 
 private:
 	UFUNCTION()
